@@ -45,12 +45,55 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void generate() {
         // YOUR CODE HERE — Call your recursive method!
+        generateWords("", 0);
+    }
+
+    public void generateWords(String str, int j) {
+        if (j == letters.length()) {
+            words.add(str);
+            return;
+        }
+        for (int i = 0; i < str.length() + 1; i++) {
+            generateWords(str.substring(0, i) + letters.charAt(j) + str.substring(i), j + 1);
+        }
+        generateWords(str, j + 1);
     }
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void sort() {
         // YOUR CODE HERE
+        words = mergeSort(words, 0, words.size());
+    }
+
+    public ArrayList<String> mergeSort(ArrayList<String> arr, int low, int high) {
+        if (high - low == 0)
+        {
+            return new ArrayList<String>(arr.subList(low, high));
+        }
+        int med = (high + low) / 2;
+        ArrayList<String> arr1 = mergeSort(arr, low, med);
+        ArrayList<String> arr2 = mergeSort(arr, med + 1, high);
+        return combine(arr1, arr2);
+    }
+
+    public ArrayList<String> combine(ArrayList<String> arr1, ArrayList<String> arr2) {
+        ArrayList<String> newArr = new ArrayList<>();
+        while (arr1.size() > 0 && arr2.size() > 0) {
+            if (arr1.get(0).compareTo(arr2.get(0)) > 0) {
+                newArr.add(arr2.remove(0));
+            }
+            else {
+                newArr.add(arr1.remove(0));
+            }
+        }
+        while (arr2.size() > 0) {
+            newArr.add(arr2.remove(0));
+        }
+        while (arr1.size() > 0) {
+            newArr.add(arr1.remove(0));
+        }
+        return newArr;
     }
 
     // Removes duplicates from the sorted list.
@@ -69,6 +112,32 @@ public class SpellingBee {
     //  If it is not in the dictionary, remove it from words.
     public void checkWords() {
         // YOUR CODE HERE
+        for (int i = 0; i < words.size(); i++)
+        {
+            if (!binarySearch(words.get(i), 0, DICTIONARY_SIZE)) {
+                words.remove(i);
+                i--;
+            }
+        }
+        for (String w : words)
+        {
+            System.out.println(w);
+        }
+    }
+
+    public boolean binarySearch(String target, int low, int high) {
+        System.out.println("Code reached here");
+        if (low == high) {
+            return false;
+        }
+        int med = (high + low) / 2;
+        if (DICTIONARY[med].equals(target)) {
+            return true;
+        }
+        if (target.compareTo(DICTIONARY[med]) < 0) {
+            return binarySearch(target, low, med - 1);
+        }
+        return binarySearch(target, med + 1, high);
     }
 
     // Prints all valid words to wordList.txt
