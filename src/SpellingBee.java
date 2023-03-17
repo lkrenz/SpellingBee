@@ -30,6 +30,7 @@ import java.util.Scanner;
  */
 public class SpellingBee {
 
+    public int numCalls = 0;
     private String letters;
     private ArrayList<String> words;
     public static final int DICTIONARY_SIZE = 143091;
@@ -49,6 +50,7 @@ public class SpellingBee {
     }
 
     public void generateWords(String str, int j) {
+        numCalls += 1;
         if (j == letters.length()) {
             words.add(str);
             return;
@@ -63,13 +65,15 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void sort() {
         // YOUR CODE HERE
-        words = mergeSort(words, 0, words.size());
+        words = mergeSort(words, 0, words.size() - 1);
     }
 
     public ArrayList<String> mergeSort(ArrayList<String> arr, int low, int high) {
         if (high - low == 0)
         {
-            return new ArrayList<String>(arr.subList(low, high));
+            ArrayList<String> newArr = new ArrayList<>();
+            newArr.add(arr.get(low));
+            return newArr;
         }
         int med = (high + low) / 2;
         ArrayList<String> arr1 = mergeSort(arr, low, med);
@@ -114,7 +118,7 @@ public class SpellingBee {
         // YOUR CODE HERE
         for (int i = 0; i < words.size(); i++)
         {
-            if (!binarySearch(words.get(i), 0, DICTIONARY_SIZE)) {
+            if (!binarySearch(words.get(i), 0, DICTIONARY_SIZE - 1)) {
                 words.remove(i);
                 i--;
             }
@@ -126,8 +130,7 @@ public class SpellingBee {
     }
 
     public boolean binarySearch(String target, int low, int high) {
-        System.out.println("Code reached here");
-        if (low == high) {
+        if (low > high) {
             return false;
         }
         int med = (high + low) / 2;
