@@ -29,8 +29,6 @@ import java.util.Scanner;
  * DO NOT MODIFY MAIN OR ANY OF THE METHOD HEADERS.
  */
 public class SpellingBee {
-
-    public int numCalls = 0;
     private String letters;
     private ArrayList<String> words;
     public static final int DICTIONARY_SIZE = 143091;
@@ -50,11 +48,14 @@ public class SpellingBee {
     }
 
     public void generateWords(String str, int j) {
-        numCalls += 1;
+        // Base case
+        // Once every letter from Letters as either been included or not,
+        // str is added to words and the code returns.
         if (j == letters.length()) {
             words.add(str);
             return;
         }
+        // Places a letter at every possible location in STR, creating all possibly variations.
         for (int i = 0; i < str.length() + 1; i++) {
             generateWords(str.substring(0, i) + letters.charAt(j) + str.substring(i), j + 1);
         }
@@ -83,6 +84,7 @@ public class SpellingBee {
 
     public ArrayList<String> combine(ArrayList<String> arr1, ArrayList<String> arr2) {
         ArrayList<String> newArr = new ArrayList<>();
+        // Compares each array, adding whichever element comes first in alphabetical order
         while (arr1.size() > 0 && arr2.size() > 0) {
             if (arr1.get(0).compareTo(arr2.get(0)) > 0) {
                 newArr.add(arr2.remove(0));
@@ -122,10 +124,6 @@ public class SpellingBee {
                 words.remove(i);
                 i--;
             }
-        }
-        for (String w : words)
-        {
-            System.out.println(w);
         }
     }
 
